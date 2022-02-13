@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { IoSearch } from 'react-icons/io5';
 import PropTypes from 'prop-types';
 import css from './Searchbar.module.css';
+import { toast } from 'react-toastify';
 
 const SearchBar = ({ onSearch }) => {
   const [query, setQuery] = useState('');
@@ -12,6 +13,9 @@ const SearchBar = ({ onSearch }) => {
 
   const handleSubmit = event => {
     event.preventDefault();
+    if (query === '') {
+      return toast.error('Type something');
+    }
     onSearch(query);
     setQuery('');
   };

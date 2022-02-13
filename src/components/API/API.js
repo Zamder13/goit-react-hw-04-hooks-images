@@ -10,7 +10,7 @@ const fetchPhotos = async (searchName, currentPage) => {
     );
     return data.hits;
   } catch (error) {
-    console.log(error);
+    return error;
   }
 };
 

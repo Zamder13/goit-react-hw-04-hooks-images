@@ -1,52 +1,48 @@
-import React, { Component } from 'react';
+// import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
 import css from './Modal.module.css';
+import { useLifecycles } from 'react-use';
 
 const modalRoot = document.querySelector('#modal-root');
 
-class Modal extends Component {
-  componentDidMount() {
-    window.addEventListener(`keydown`, this.handleKeyDown);
-  }
+const Modal = ({ children, onClose }) => {
+  useLifecycles(
+    () => window.addEventListener(`keydown`, handleKeyDown),
+    () => window.removeEventListener(`keydown`, handleKeyDown),
+  );
 
-  componentWillUnmount() {
-    window.removeEventListener(`keydown`, this.handleKeyDown);
-  }
-
-  handleKeyDown = evt => {
+  const handleKeyDown = evt => {
     if (evt.code === `Escape`) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleBackdropClick = event => {
+  const handleBackdropClick = event => {
     if (event.target === event.currentTarget) {
-      this.props.onClose();
+      onClose();
     }
   };
 
-  handleButtonClick = () => {
-    this.props.onClose();
+  const handleButtonClick = () => {
+    onClose();
   };
 
-  render() {
-    return createPortal(
-      <div className={css.overlay} onClick={this.handleBackdropClick}>
-        <div className={css.modal}>{this.props.children}</div>
-        <button
-          type="button"
-          className={css.modalButton}
-          onClick={this.handleButtonClick}
-        >
-          <IoClose size={32} />
-        </button>
-      </div>,
-      modalRoot,
-    );
-  }
-}
+  return createPortal(
+    <div className={css.overlay} onClick={handleBackdropClick}>
+      <div className={css.modal}>{children}</div>
+      <button
+        type="button"
+        className={css.modalButton}
+        onClick={handleButtonClick}
+      >
+        <IoClose size={32} />
+      </button>
+    </div>,
+    modalRoot,
+  );
+};
 
 Modal.propTypes = {
   onClose: PropTypes.func.isRequired,
