@@ -1,4 +1,3 @@
-// import React, { Component } from 'react';
 import { createPortal } from 'react-dom';
 import { IoClose } from 'react-icons/io5';
 import PropTypes from 'prop-types';
